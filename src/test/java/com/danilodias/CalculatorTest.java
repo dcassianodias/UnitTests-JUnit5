@@ -9,8 +9,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.*;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @DisplayName("Test Math operations in Calculator class")
 class CalculatorTest {
@@ -48,7 +50,7 @@ class CalculatorTest {
         int divisor = 2;
         int expectedResult = 2;
         int result = this.calculator.integerDivision(dividend, divisor);
-        Assertions.assertEquals(expectedResult, result, "4/2 nao gerou o resultado 2");
+        assertEquals(expectedResult, result, "4/2 nao gerou o resultado 2");
     }
 
     @DisplayName("Division by Zero")
@@ -61,21 +63,39 @@ class CalculatorTest {
         ArithmeticException actualException = (ArithmeticException)Assertions.assertThrows(ArithmeticException.class, () -> {
             this.calculator.integerDivision(dividend, divisor);
         }, "Division by zero should have throws an Arithmetic exception");
-        Assertions.assertEquals(expectedExceptionMessage, actualException.getMessage(), "Unexpected exception message");
+        assertEquals(expectedExceptionMessage, actualException.getMessage(), "Unexpected exception message");
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"Danilo", "Viviane", "Thabata"})
+    void valueSourceDemonstration(String firstName){
+        System.out.println(firstName);
+        assertNotNull(firstName);
     }
 
     @DisplayName("Test integer subtraction [minuend, subtraend, expectedResult")
     @ParameterizedTest
-    @MethodSource
+    //@MethodSource
+//    @CsvSource({
+//            "33, 1, 32",
+//            "23, 11, 12",
+//            "50, 8, 42"
+//    })
+    @CsvFileSource(resources = "/integerSubtraction.csv")
     void integerSubtraction(int minuend, int subtraend, int expectedResult) {
         System.out.println("Running Test " + minuend + " - " + subtraend + " = " + expectedResult);
-        int result = this.calculator.integerSubtraction(minuend, subtraend);
-        Assertions.assertEquals(expectedResult, result, () -> {
-            return "" + minuend + " - " + subtraend + " Não produziu: " + expectedResult;
-        });
+
+        int actualResult = calculator.integerSubtraction(minuend, subtraend);
+
+        assertEquals(expectedResult, actualResult, () ->
+                minuend + " - " + subtraend + " = " + expectedResult);
     }
 
-    private static Stream<Arguments> integerSubtraction() {
-        return Stream.of(Arguments.of(new Object[]{33, 1, 32}), Arguments.of(new Object[]{54, 1, 53}), Arguments.of(new Object[]{24, 1, 23}));
-    }
+//    private static Stream<Arguments> integerSubtraction() {
+//        return Stream.of(
+//                Arguments.of(33, 1, 32),
+//                Arguments.of(54, 1, 53),
+//                Arguments.of(24, 1, 23)
+//        );
+//    }
 }
