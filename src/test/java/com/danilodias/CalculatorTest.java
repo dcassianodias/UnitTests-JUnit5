@@ -1,18 +1,11 @@
 package com.danilodias;
 
-import java.util.stream.Stream;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.*;
+import org.junit.jupiter.params.provider.CsvFileSource;
+import org.junit.jupiter.params.provider.ValueSource;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("Test Math operations in Calculator class")
 class CalculatorTest {
@@ -57,12 +50,17 @@ class CalculatorTest {
     @Test
     void testIntegerDivision_WhenDividendIsDividedByZero_ShouldThrowArithmeticException() {
         System.out.println("Running Division by Zero ");
+        //Arrange
         int dividend = 4;
         int divisor = 0;
         String expectedExceptionMessage = "/ by zero";
-        ArithmeticException actualException = (ArithmeticException)Assertions.assertThrows(ArithmeticException.class, () -> {
+
+        //Act & Assert
+        ArithmeticException actualException = (ArithmeticException)assertThrows(ArithmeticException.class, () -> {
             this.calculator.integerDivision(dividend, divisor);
         }, "Division by zero should have throws an Arithmetic exception");
+
+        //Assert
         assertEquals(expectedExceptionMessage, actualException.getMessage(), "Unexpected exception message");
     }
 
